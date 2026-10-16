@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 import uuid
 
-from PySide6.QtCore import Qt, QThread, Signal, QStandardPaths, QRect
+from PySide6.QtCore import Qt, QThread, Signal, QStandardPaths, QRect, QCoreApplication, QEvent
 from PySide6.QtGui import QPixmap, QPainter, QColor, QIcon
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QMessageBox, QDialog, QCheckBox, QDialogButtonBox,
@@ -508,4 +508,10 @@ def main():
     if smoke:
         from PySide6.QtCore import QTimer
         QTimer.singleShot(300, app.quit)
-    return app.exec()
+    result = app.exec()
+    # Destroy native widgets before QApplication and the frozen Python runtime unload Qt.
+    window.close()
+    window.deleteLater()
+    QCoreApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+    app.processEvents()
+    return result

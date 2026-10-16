@@ -35,7 +35,7 @@ Não há WebRTC/ICE/STUN/TURN nem criptografia ponta a ponta da imagem: o relay 
 
 ## Compilar e testar
 
-Python 3.14 e .NET 8. Em um ambiente virtual:
+Python 3.13 e .NET 8. Em um ambiente virtual:
 
 ```text
 python -m pip install -r portable/requirements.txt pyinstaller==6.22.3
