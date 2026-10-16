@@ -148,8 +148,8 @@ class Screen(QWidget):
 
     def pointer(self, event, kind, **values):
         if self.control and self.area.contains(event.position().toPoint()):
-            self.emit(kind=kind, x=(event.position().x()-self.area.x())/max(1,self.area.width()-1),
-                      y=(event.position().y()-self.area.y())/max(1,self.area.height()-1), **values)
+            self.emit(kind=kind, x=min(1,max(0,(event.position().x()-self.area.x())/max(1,self.area.width()-1))),
+                      y=min(1,max(0,(event.position().y()-self.area.y())/max(1,self.area.height()-1))), **values)
 
     def mouseMoveEvent(self, e):
         self.pointer(e, "move")

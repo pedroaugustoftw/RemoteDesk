@@ -50,7 +50,7 @@ class Security(unittest.TestCase):
 class Transfers(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.root = Path(self.temp.name)
+        self.root = Path(self.temp.name).resolve()
         self.messages = []
         self.queue_a, self.queue_b = asyncio.Queue(), asyncio.Queue()
         async def choose(name, size):

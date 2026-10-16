@@ -128,12 +128,61 @@ def main():
                     break
                 except OSError:time.sleep(.1)
             else:raise RuntimeError("Isolated services failed to start")
-            asyncio.run(exercise(f"ws://127.0.0.1:{signal_port}/ws",Path(temp)))
+            async def suite():
+                url=f"ws://127.0.0.1:{signal_port}/ws"
+                await exercise(url,Path(temp).resolve())
+                await engines(url)
+            asyncio.run(suite())
         finally:
             for process in processes:
                 process.terminate()
             for process in processes:
                 process.wait(timeout=10)
+
+
+async def engines(url):
+    from remotedesk.engine import Engine
+    from unittest.mock import patch
+    events_a,events_b=asyncio.Queue(),asyncio.Queue()
+    async def consent(kind,payload):
+        return {"view":True,"control":True,"files":True} if kind=="consent" else None
+    a=Engine({"server":url},new_key(),lambda k,v:events_a.put_nowait((k,v)),consent)
+    b=Engine({"server":url},new_key(),lambda k,v:events_b.put_nowait((k,v)),consent)
+    output=io.BytesIO()
+    Image.new("RGB",(120,80),"blue").save(output,"JPEG")
+    received=[]
+    b.apply_input=lambda d:received.append(d)
+    async def event(queue,kind):
+        while True:
+            k,v=await asyncio.wait_for(queue.get(),15)
+            if k=="error":raise AssertionError(v)
+            if k==kind:return v
+    with patch('remotedesk.engine.host_supported',return_value=True),patch('remotedesk.engine.grab_frame',return_value=base64.b64encode(output.getvalue()).decode()):
+        tasks=[asyncio.create_task(a.run()),asyncio.create_task(b.run())]
+        try:
+            await event(events_a,"ready")
+            target=await event(events_b,"ready")
+            await a.request(target)
+            await event(events_a,"started")
+            await event(events_b,"started")
+            assert await event(events_a,"frame")==output.getvalue()
+            await a.emit("input",data={"kind":"move","x":.4,"y":.7})
+            await a.emit("quality",qualityLevel=10)
+            for _ in range(100):
+                if received and b.level==10:break
+                await asyncio.sleep(.03)
+            assert received[0]["x"]==.4 and b.level==10
+            await a.end()
+            await event(events_b,"ended")
+            for _ in range(100):
+                if b.session is None:break
+                await asyncio.sleep(.02)
+            assert b.session is None
+            print("PASS actual Engine pair: consent, relay attachment, frame capture loop, control routing (mock actuator), quality and end cleanup")
+        finally:
+            await a.stop();await b.stop()
+            for task in tasks:task.cancel()
+            await asyncio.gather(*tasks,return_exceptions=True)
 
 
 if __name__=="__main__":main()
