@@ -136,6 +136,26 @@ class Transfers(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(ValueError):
             await self.a.receive({"kind":"browse","transferId":uuid.uuid4().hex,"path":str(self.root)})
 
+    async def test_listing_matches_dotnet_request_response_pagination(self):
+        for i in range(105):
+            (self.root/f"file-{i:03}.txt").touch()
+        sent=[]
+        async def emit(f):sent.append(f)
+        async def choose(n,s):return None
+        host=FileTransfer(emit,choose,lambda s:None,True)
+        await host.receive({"kind":"browse","transferId":uuid.uuid4().hex,"path":str(self.root),"offset":0})
+        self.assertEqual(len(sent),1)
+        first=sent[0]
+        self.assertEqual(len(first["entries"]),100)
+        self.assertEqual(first["offset"],100)
+        self.assertTrue(first["more"])
+        await host.receive({"kind":"browse","transferId":uuid.uuid4().hex,"path":str(self.root),"offset":100})
+        self.assertEqual(len(sent),2)
+        second=sent[1]
+        self.assertFalse(second["more"])
+        self.assertFalse({e['name'] for e in first['entries']} & {e['name'] for e in second['entries']})
+        self.assertEqual(len(second["entries"]),6)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -3,7 +3,7 @@
 Versão 1.1 em prévia: [downloads](https://github.com/pedroaugustoftw/RemoteDesk/releases) e [cliente Windows/Linux/macOS, configuração e limites](docs/cross-platform.md). O cliente Windows WPF permanece disponível. A prévia Qt usa o mesmo servidor, mas ainda exige validação entre computadores físicos.
 
 
-Aplicação desktop Windows de acesso remoto, implementada em código próprio. O escopo de implantação atual é **rede local Windows**. Cada conexão exige aceite local ou acesso por senha previamente habilitado pelo proprietário.
+Aplicação desktop de acesso remoto com cliente Windows WPF e cliente Qt multiplataforma em prévia, implementados em código próprio. Funciona com infraestrutura LAN ou servidor/relay próprio com TLS e gateway para túnel HTTP. Cada sessão recebida no Qt exige aceite local; o cliente Windows também oferece acesso por senha previamente habilitado pelo proprietário.
 
 ## Usar na rede local
 
@@ -43,7 +43,7 @@ A interface inicial, menu principal e estrutura de Configurações seguem as tr�
 
 A captura usa GDI e JPEG por quadro, com resolução, qualidade, FPS e monitor configuráveis. Não há WGC, H.264/AV1, codificação GPU, áudio, clipboard compartilhado ou serviço de controle. A seleção de monitor ocorre antes de iniciar a sessão. O envio limita tamanho, qualidade e taxa; o cliente mantém somente o frame mais recente aguardando apresentação.
 
-TLS protege cliente↔servidor e cliente↔relay. O relay consegue acessar o conteúdo; criptografia ponta a ponta, conexão direta e ICE/STUN/TURN não estão implementados. Implantação pela internet e otimização em condições reais de WAN ficam para uma fase posterior. Os executáveis ainda não possuem assinatura Authenticode.
+TLS protege cliente↔servidor e cliente↔relay. O relay consegue acessar o conteúdo; criptografia ponta a ponta, conexão direta e ICE/STUN/TURN não estão implementados. O modo VPS/gateway permite implantação pela internet; homologação entre máquinas físicas e otimização em condições reais de WAN continuam pendentes. Os executáveis ainda não possuem assinatura Authenticode.
 
 ## Investigação
 

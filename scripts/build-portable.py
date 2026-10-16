@@ -67,16 +67,16 @@ elif system=="macos":
     # Resources were added after PyInstaller's ad-hoc signature; sign the final bundle again.
     subprocess.run(["codesign","--force","--deep","--sign","-",str(app)],check=True)
     smoke(app/"Contents/MacOS/RemoteDesk")
-    # Disk image with the standard Applications shortcut for drag-to-install.
-    (stage/"Applications").symlink_to("/Applications",target_is_directory=True)
-    shutil.copy2(root/"docs/cross-platform.md",stage/"LEIA-ME.md")
-    dmg=release/f"RemoteDesk-{system}-{arch}.dmg"
-    image_stage=out/"image"
-    image_stage.mkdir(exist_ok=True)
-    shutil.copytree(app,image_stage/"RemoteDesk.app",symlinks=True,dirs_exist_ok=True)
-    (image_stage/"Applications").symlink_to("/Applications",target_is_directory=True)
-    shutil.copy2(root/"docs/cross-platform.md",image_stage/"LEIA-ME.md")
-    subprocess.run(["hdiutil","create","-volname","RemoteDesk","-srcfolder",str(image_stage),"-ov","-format","UDZO",str(dmg)],check=True)
+    # ditto preserves bundle symlinks/resources without requiring a mounted disk image on CI.
+    archive=release/f"RemoteDesk-{system}-{arch}.zip"
+    subprocess.run(["codesign","--verify","--deep","--strict",str(app)],check=True)
+    subprocess.run(["ditto","-c","-k","--sequesterRsrc","--keepParent",str(app),str(archive)],check=True)
+    unpack=out/"verify-archive"
+    unpack.mkdir(exist_ok=True)
+    subprocess.run(["ditto","-x","-k",str(archive),str(unpack)],check=True)
+    restored=unpack/"RemoteDesk.app"
+    subprocess.run(["codesign","--verify","--deep","--strict",str(restored)],check=True)
+    smoke(restored/"Contents/MacOS/RemoteDesk")
 else:
     bundle=stage/"RemoteDesk"
     shutil.copy2(root/"portable/install-linux.sh",bundle/"install-linux.sh")

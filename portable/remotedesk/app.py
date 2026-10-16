@@ -220,6 +220,11 @@ class Files(QDialog):
             button.clicked.connect(refresh)
             address.returnPressed.connect(refresh)
             box.addWidget(button)
+            if view is self.remote:
+                self.more = QPushButton("Carregar mais")
+                self.more.setEnabled(False)
+                self.more.clicked.connect(self.load_more)
+                box.addWidget(self.more)
             split.addWidget(pane)
         self.local.itemDoubleClicked.connect(lambda item: self.open_directory(item, False))
         self.remote.itemDoubleClicked.connect(lambda item: self.open_directory(item, True))
@@ -257,12 +262,21 @@ class Files(QDialog):
     def refresh_remote(self):
         self.remote.clear()
         self.remote_path = self.remote_address.text()
+        self.next_offset = 0
+        self.load_more()
+
+    def load_more(self):
+        self.more.setEnabled(False)
         self.request = uuid.uuid4().hex
-        self.owner.worker.call("send_file", {"kind":"browse", "transferId":self.request,"path":self.remote_path})
+        self.owner.worker.call("send_file", {"kind":"browse", "transferId":self.request,
+            "path":self.remote_path,"offset":self.next_offset})
 
     def listing(self, f):
         if f.get("transferId") == self.request:
             self.add(self.remote, f.get("entries") or [])
+            offset = f.get("offset", 0)
+            self.more.setEnabled(bool(f.get("more")) and isinstance(offset,int) and offset > self.next_offset)
+            self.next_offset = offset
             if f.get("error"):
                 self.progress.setText(f["error"])
 

@@ -6,7 +6,7 @@ O cliente Windows WPF continua disponível como `RemoteDesk-Setup.exe`. O novo c
 
 - Windows 10/11 x64: instalador Windows ou ZIP portable. O ZIP Qt tem perfil próprio; não importa a identidade DPAPI do cliente WPF.
 - Linux x64: pacote `.tar.gz`, construído em Ubuntu 22.04. Extraia e execute `./RemoteDesk`. Opcionalmente rode `./install-linux.sh` para adicionar ao menu do usuário. Precisa de ambiente gráfico, bibliotecas X11/Qt e cofre Secret Service desbloqueado (por exemplo GNOME Keyring). Não executar como root.
-- macOS: escolha `.dmg` arm64 para Apple Silicon ou x64 para Intel. Arraste RemoteDesk para Applications. Build de prévia com assinatura ad-hoc, sem certificado Developer ID/notarização Apple. O sistema pode impedir a abertura; não há instalador assinado nesta versão.
+- macOS: escolha o `.zip` arm64 para Apple Silicon ou x64 para Intel. Extraia com o Finder e arraste `RemoteDesk.app` para Applications. Build de prévia com assinatura ad-hoc, sem certificado Developer ID/notarização Apple. O sistema pode impedir a abertura; não há instalador assinado nesta versão.
 
 No cliente Qt informe **Servidor**, **Relay** opcional e **SHA-256 TLS**. Todos devem usar a mesma infraestrutura:
 

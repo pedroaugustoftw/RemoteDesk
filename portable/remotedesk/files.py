@@ -139,9 +139,12 @@ class FileTransfer:
                         await self.send("listing", tid, path=f["path"], entries=[])
                         return
                     entries = await asyncio.to_thread(listing, f.get("path", ""))
-                    for offset in range(0, max(1, len(entries)), 100):
-                        await self.send("listing", tid, path=f.get("path", ""), entries=entries[offset:offset+100],
-                                        more=offset+100 < len(entries))
+                    offset = f.get("offset", 0)
+                    if not isinstance(offset, int) or not 0 <= offset <= 1000000:
+                        raise ValueError("Página inválida.")
+                    page = entries[offset:offset+100]
+                    await self.send("listing", tid, path=f.get("path", ""), entries=page,
+                                    offset=offset+len(page), more=offset+100 < len(entries))
             elif kind == "offer":
                 name, size, digest = f.get("name"), f.get("size", -1), f.get("hash", "")
                 if len(self.incoming) >= 2 or tid in self.incoming or not valid_name(name) or not isinstance(size, int) or not 0 <= size <= LIMIT or not re.fullmatch("[0-9a-fA-F]{64}", digest):
