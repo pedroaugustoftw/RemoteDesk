@@ -1,5 +1,7 @@
 Prévia 1.1 do RemoteDesk.
 
+Nesta publicação, os exemplos de implantação são genéricos e o identificador macOS é `br.com.pedro.remotedesk`. O macOS pode solicitar novamente permissões para o aplicativo com o novo identificador.
+
 - Instaladores Windows cliente/servidor com registro em Aplicativos instalados e desinstalador próprio.
 - Cliente desktop Qt para Windows x64, Linux x64 e macOS Intel/Apple Silicon, usando o broker/relay RemoteDesk existente.
 - Captura JPEG, visualização, consentimento explícito, permissões separadas, controle, qualidade ajustável e arquivos com SHA-256.

@@ -64,6 +64,9 @@ if system=="windows":
     shutil.make_archive(str(release/f"RemoteDesk-{system}-{arch}-portable"),"zip",stage,"RemoteDesk")
 elif system=="macos":
     app=stage/"RemoteDesk.app"
+    import plistlib
+    with (app/"Contents/Info.plist").open("rb") as stream:
+        assert plistlib.load(stream)["CFBundleIdentifier"] == "br.com.pedro.remotedesk"
     # Resources were added after PyInstaller's ad-hoc signature; sign the final bundle again.
     subprocess.run(["codesign","--force","--deep","--sign","-",str(app)],check=True)
     smoke(app/"Contents/MacOS/RemoteDesk")
@@ -75,6 +78,8 @@ elif system=="macos":
     unpack.mkdir(exist_ok=True)
     subprocess.run(["ditto","-x","-k",str(archive),str(unpack)],check=True)
     restored=unpack/"RemoteDesk.app"
+    with (restored/"Contents/Info.plist").open("rb") as stream:
+        assert plistlib.load(stream)["CFBundleIdentifier"] == "br.com.pedro.remotedesk"
     subprocess.run(["codesign","--verify","--deep","--strict",str(restored)],check=True)
     smoke(restored/"Contents/MacOS/RemoteDesk")
 else:
