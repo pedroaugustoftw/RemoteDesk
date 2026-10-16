@@ -33,6 +33,8 @@ Implementados no cliente Qt: registro RSA-PSS, TLS com validação pública ou p
 
 Não há WebRTC/ICE/STUN/TURN nem criptografia ponta a ponta da imagem: o relay termina TLS. O operador do servidor é parte da confiança. Nenhuma porta externa de FTP é necessária.
 
+O envio de arquivos é cadenciado em até cerca de 3 MiB/s por fluxo para respeitar o limite de mensagens do relay e manter margem para imagem/entrada. A integração automatizada transmite e verifica 20 MiB, acima de uma janela do limite de mensagens. Ajustes de maior vazão ficam para uma versão posterior.
+
 ## Compilar e testar
 
 Python 3.13 e .NET 8. Em um ambiente virtual:

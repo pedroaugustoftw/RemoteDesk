@@ -68,7 +68,7 @@ async def exercise(url, root):
         assert (await read(h,"quality"))["qualityLevel"]==25
         from remotedesk.files import FileTransfer
         source=root/"source.bin"
-        source.write_bytes(os.urandom(180000))
+        source.write_bytes(os.urandom(20*1024*1024))
         destination=root/"result.bin"
         async def file_v(f):
             await send(v,{"type":"file","sessionId":session,"file":f})
@@ -76,8 +76,13 @@ async def exercise(url, root):
             await send(h,{"type":"file","sessionId":session,"file":f})
         async def choose(n,s):
             return str(destination)
-        viewer=FileTransfer(file_v,choose,print,False)
-        receiver=FileTransfer(file_h,choose,print,True)
+        reported=set()
+        def report(text):
+            if text not in reported and ("%" not in text or any(text.endswith(f": {i}%") for i in (0,25,50,75,100))):
+                reported.add(text)
+                print(text)
+        viewer=FileTransfer(file_v,choose,report,False)
+        receiver=FileTransfer(file_h,choose,report,True)
         async def pump(ws,manager):
             while True:
                 m=json.loads(await ws.recv())
@@ -85,7 +90,7 @@ async def exercise(url, root):
                     await manager.receive(m["file"])
         pumps=[asyncio.create_task(pump(v,viewer)),asyncio.create_task(pump(h,receiver))]
         try:
-            await asyncio.wait_for(viewer.upload(str(source)),15)
+            await asyncio.wait_for(viewer.upload(str(source)),30)
             assert destination.read_bytes()==source.read_bytes()
         finally:
             for p in pumps:p.cancel()

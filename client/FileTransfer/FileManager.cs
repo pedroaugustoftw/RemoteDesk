@@ -57,6 +57,8 @@ public sealed class FileManager(Func<Envelope,Task> send, Action<string> progres
             {
                 cancel.Token.ThrowIfCancellationRequested();
                 await SendOutgoing(new("chunk",id,Chunk:Convert.ToBase64String(buffer,0,count),Offset:offset));offset+=count;
+                // Bound bursts so files leave room for screen/input below the relay's message limit.
+                await Task.Delay(20,cancel.Token);
                 Report($"Enviando {Path.GetFileName(sourcePath)}: {offset*100/Math.Max(1,source.Length)}%");
             }
             cancel.Token.ThrowIfCancellationRequested();await SendOutgoing(new("complete",id));Report("Enviado; aguardando verificação SHA-256 do destino…");if(!await completed.Task.WaitAsync(TimeSpan.FromMinutes(10),cancel.Token))throw new IOException("Destino não confirmou o arquivo.");return true;

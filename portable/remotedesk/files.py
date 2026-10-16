@@ -92,6 +92,9 @@ class FileTransfer:
                 offset = 0
                 while block := await asyncio.to_thread(stream.read, 65536):
                     await self.send("chunk", tid, chunk=base64.b64encode(block).decode(), offset=offset)
+                    # Leave room below the relay's per-peer 240 message/s limit for video/input
+                    # and a second accepted file stream. Do not burst on a fast LAN.
+                    await asyncio.sleep(.02)
                     offset += len(block)
                     self.report(f"Enviando {path.name}: {offset * 100 // max(size, 1)}%")
                 await self.send("complete", tid)
