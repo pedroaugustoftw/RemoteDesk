@@ -21,6 +21,7 @@ As portas TCP 5081/5091 precisam estar alcançáveis entre os PCs. O instalador 
 ## Componentes e código
 
 - `client/`: WPF .NET 8, identidade RSA protegida por DPAPI, configurações e histórico; captura GDI/JPEG; controle por SendInput dentro de sessão autorizada; transferência em blocos com confirmação de destino e SHA-256.
+- `portable/`: cliente Qt para Linux/macOS/Windows; cofre do sistema, captura JPEG, controle supervisionado e arquivos, com limites descritos no guia multiplataforma.
 - `server/`: ASP.NET Core; autenticação por desafio RSA-PSS, registro persistente, solicitações, permissões e encerramento; emissão e renovação da autorização do relay.
 - `relay/`: processo ASP.NET Core independente; tickets de uso único, papéis separados, limites de mídia, heartbeat e lease revogável. Usa WSS, sem protocolo proprietário.
 - `shared/`: mensagens e validação comum.
