@@ -58,6 +58,7 @@ class FileTransfer:
     def __init__(self, emit, choose, report, host):
         self.emit, self.choose, self.report, self.host = emit, choose, report, host
         self.incoming, self.waiters, self.downloads, self.tasks = {}, {}, {}, set()
+        self.uploads = {}
 
     async def send(self, kind, tid, **values):
         await self.emit({"kind": kind, "transferId": tid, **values})
@@ -72,6 +73,7 @@ class FileTransfer:
         tid = tid or uuid.uuid4().hex
         ready, done = asyncio.Future(), asyncio.Future()
         self.waiters[tid] = (ready, done)
+        self.uploads[tid] = asyncio.current_task()
         try:
             path = checked_path(source)
             if not path.is_file() or not valid_name(path.name):
@@ -104,6 +106,7 @@ class FileTransfer:
                 pass
         finally:
             self.waiters.pop(tid, None)
+            self.uploads.pop(tid, None)
 
     async def download(self, remote, local):
         if len(self.downloads) >= 16:
@@ -191,6 +194,9 @@ class FileTransfer:
                 if kind in ("cancel", "reject"):
                     self.drop(tid)
                     self.downloads.pop(tid, None)
+                    upload = self.uploads.get(tid)
+                    if upload and upload is not asyncio.current_task():
+                        upload.cancel()
                 pair = self.waiters.get(tid)
                 if pair:
                     future = pair[1 if kind == "verified" else 0]
@@ -207,6 +213,9 @@ class FileTransfer:
                             error=str(ex)[:512])
 
     def close(self):
+        for upload in list(self.uploads.values()):
+            if upload is not asyncio.current_task():
+                upload.cancel()
         for task in list(self.tasks):
             task.cancel()
         for tid in list(self.incoming):

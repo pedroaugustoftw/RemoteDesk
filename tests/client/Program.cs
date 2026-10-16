@@ -18,6 +18,12 @@ internal static class Program
     [STAThread] static async Task<int> Main()
     {
         Directory.CreateDirectory(DirectoryPath);
+        await Check("remote POSIX paths preserve destination syntax",()=>{
+            Assert(RemotePath.Combine("/home/user","image.png")=="/home/user/image.png");
+            Assert(RemotePath.Combine("/","image.png")=="/image.png");
+            Assert(RemotePath.Parent("/home/user")=="/home");Assert(RemotePath.Parent("/home")=="/");Assert(RemotePath.Parent("/")=="");
+            Assert(RemotePath.Combine(@"C:\Users","image.png")==@"C:\Users\image.png");return Task.CompletedTask;
+        });
         await Check("transmission presets bounds and monotonic balance",()=>{
             var previous=TransmissionPreset.FromLevel(0);Assert(previous==new TransmissionPreset(30,800,20));
             for(int i=1;i<=100;i++){var p=TransmissionPreset.FromLevel(i);Assert(p.Quality>=previous.Quality&&p.Width>=previous.Width&&p.Fps<=previous.Fps);previous=p;}

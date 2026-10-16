@@ -49,15 +49,24 @@ for source in (root/"portable/licenses").glob("*"):
     shutil.copy2(source,licenses/source.name)
 release=root/"artifacts/release"
 release.mkdir(parents=True,exist_ok=True)
+def smoke(executable):
+    diagnostic=out/"startup.log"
+    environment={**os.environ,"REMOTEDESK_DIAGNOSTICS":str(diagnostic)}
+    try:
+        subprocess.run([str(executable),"--smoke-test"],check=True,timeout=40,env=environment)
+    except Exception:
+        if diagnostic.exists():
+            print(diagnostic.read_text(errors="replace"))
+        raise
 if system=="windows":
     exe=stage/"RemoteDesk/RemoteDesk.exe"
-    subprocess.run([str(exe),"--smoke-test"],check=True,timeout=40)
+    smoke(exe)
     shutil.make_archive(str(release/f"RemoteDesk-{system}-{arch}-portable"),"zip",stage,"RemoteDesk")
 elif system=="macos":
     app=stage/"RemoteDesk.app"
     # Resources were added after PyInstaller's ad-hoc signature; sign the final bundle again.
     subprocess.run(["codesign","--force","--deep","--sign","-",str(app)],check=True)
-    subprocess.run([str(app/"Contents/MacOS/RemoteDesk"),"--smoke-test"],check=True,timeout=40)
+    smoke(app/"Contents/MacOS/RemoteDesk")
     # Disk image with the standard Applications shortcut for drag-to-install.
     (stage/"Applications").symlink_to("/Applications",target_is_directory=True)
     shutil.copy2(root/"docs/cross-platform.md",stage/"LEIA-ME.md")
@@ -75,7 +84,7 @@ else:
     shutil.copy2(icon,bundle/"RemoteDesk.png")
     shutil.copy2(root/"docs/cross-platform.md",bundle/"LEIA-ME.md")
     (bundle/".remotedesk-owned").write_text("RemoteDesk portable 1\n")
-    subprocess.run([str(bundle/"RemoteDesk"),"--smoke-test"],check=True,timeout=40)
+    smoke(bundle/"RemoteDesk")
     with tarfile.open(release/f"RemoteDesk-{system}-{arch}.tar.gz","w:gz") as archive:
         archive.add(bundle,arcname="RemoteDesk")
 print("Portable package:",system,arch)

@@ -107,6 +107,28 @@ class Transfers(unittest.IsolatedAsyncioTestCase):
         await self.b.receive({"kind":"cancel","transferId":tid})
         self.assertFalse(list((self.root/"destination").iterdir()))
 
+    async def test_peer_cancel_stops_outgoing_chunks(self):
+        started,hold=asyncio.Event(),asyncio.Event()
+        tid=uuid.uuid4().hex
+        chunks=[]
+        async def emit(f):
+            if f["kind"]=="offer":
+                await manager.receive({"kind":"accept","transferId":tid})
+            elif f["kind"]=="chunk":
+                chunks.append(f)
+                started.set()
+                await hold.wait()
+        async def choose(n,s):return None
+        manager=FileTransfer(emit,choose,lambda s:None,False)
+        source=self.root/"large.bin"
+        source.write_bytes(os.urandom(200000))
+        task=asyncio.create_task(manager.upload(str(source),tid=tid))
+        await asyncio.wait_for(started.wait(),5)
+        await manager.receive({"kind":"cancel","transferId":tid})
+        await asyncio.wait_for(task,5)
+        self.assertEqual(len(chunks),1)
+        self.assertFalse(manager.uploads)
+
     async def test_listing_pages_and_direction(self):
         for i in range(105):
             (self.root/f"{i}.txt").touch()
