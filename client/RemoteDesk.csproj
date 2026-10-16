@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType><TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF><UseWindowsForms>true</UseWindowsForms><ImplicitUsings>disable</ImplicitUsings><Nullable>enable</Nullable>
+    <AssemblyName>RemoteDesk</AssemblyName><RootNamespace>RemoteDesk.Client</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest><ApplicationIcon>UI\RemoteDesk.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup><Compile Include="../desktop/WindowSizing.cs" Link="UI/WindowSizing.cs"/><ProjectReference Include="..\shared\RemoteDesk.Shared.csproj" /><Resource Include="UI\RemoteDesk.ico" /><Resource Include="UI\RemotePointer.cur" /></ItemGroup>
+</Project>

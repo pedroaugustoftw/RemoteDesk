@@ -1,0 +1,50 @@
+services:
+  server:
+    image: mcr.microsoft.com/dotnet/aspnet:8.0
+    working_dir: /app
+    command: ["dotnet", "RemoteDesk.Server.dll"]
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      RemoteDesk__RegistryPath: /data/devices.json
+      RemoteDesk__KnownProxies__0: 172.30.48.3
+      RemoteDesk__RelayUrl: wss://${REMOTEDESK_HOST:?Configure REMOTEDESK_HOST}/relay/ws
+      RemoteDesk__RelayApiUrl: http://edge:8082
+      RemoteDesk__RelaySecret: ${REMOTEDESK_RELAY_SECRET:?Configure um segredo de pelo menos 32 caracteres}
+    volumes:
+      - ./server-publish:/app:ro
+      - ./server-data:/data
+    restart: unless-stopped
+    networks:
+      backend:
+        ipv4_address: 172.30.48.2
+    # Backend is exposed only to the internal container network.
+  relay:
+    image: mcr.microsoft.com/dotnet/aspnet:8.0
+    working_dir: /app
+    command: ["dotnet", "RemoteDesk.Relay.dll"]
+    environment:
+      ASPNETCORE_URLS: http://+:8081
+      RemoteDesk__RelaySecret: ${REMOTEDESK_RELAY_SECRET:?Configure um segredo de pelo menos 32 caracteres}
+      RemoteDesk__KnownProxies__0: 172.30.48.3
+    volumes:
+      - ./relay-publish:/app:ro
+    restart: unless-stopped
+    networks:
+      backend:
+        ipv4_address: 172.30.48.4
+  edge:
+    image: nginx:stable-alpine
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./tls:/etc/nginx/tls:ro
+    depends_on: [server, relay]
+    restart: unless-stopped
+    networks:
+      backend:
+        ipv4_address: 172.30.48.3
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: 172.30.48.0/24

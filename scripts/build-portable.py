@@ -1,0 +1,81 @@
+"""Build on the destination OS, then package without losing Unix modes/symlinks."""
+import hashlib
+import importlib.metadata
+import os
+from pathlib import Path
+import platform
+import shutil
+import subprocess
+import sys
+import tarfile
+
+root=Path(__file__).resolve().parent.parent
+os.chdir(root)
+system={"Windows":"windows","Linux":"linux","Darwin":"macos"}[platform.system()]
+arch="arm64" if platform.machine().lower() in ("arm64","aarch64") else "x64"
+out=root/"artifacts"/"portable"/(system+"-"+arch)
+stage=out/"dist"
+icon=root/"branding/final/icons/remotedesk-app-icon-256.png"
+args=[sys.executable,"-m","PyInstaller","--noconfirm","--clean","--windowed","--onedir",
+      "--name","RemoteDesk","--paths","portable","--distpath",str(stage),"--workpath",str(out/"build"),
+      "--specpath",str(out),"--collect-submodules","keyring.backends",
+      "--hidden-import","pyautogui","--exclude-module","PySide6.QtWebEngineCore",
+      "--exclude-module","PySide6.QtWebEngineWidgets","--exclude-module","PySide6.QtPdf",
+      "--add-data",str(icon)+os.pathsep+"assets"]
+if system=="windows":
+    args += ["--icon",str(root/"branding/final/RemoteDesk.ico")]
+elif system=="macos":
+    from PIL import Image
+    out.mkdir(parents=True,exist_ok=True)
+    icns=out/"RemoteDesk.icns"
+    Image.open(root/"branding/final/icons/icon-512.png").save(icns,format="ICNS")
+    args += ["--icon",str(icns),"--osx-bundle-identifier","br.com.pedro.remotedesk"]
+args += ["portable/launch.py"]
+subprocess.run(args,check=True)
+bundle=stage/("RemoteDesk.app/Contents/Resources" if system=="macos" else "RemoteDesk")
+licenses=bundle/"THIRD_PARTY_LICENSES"
+licenses.mkdir(parents=True,exist_ok=True)
+for distribution in importlib.metadata.distributions():
+    name=distribution.metadata.get("Name","dependency")
+    for file in distribution.files or []:
+        if any(part.lower() in ("licenses","license") for part in file.parts) or file.name.lower().startswith(("license","copying","notice")):
+            source=distribution.locate_file(file)
+            if source.is_file():
+                destination=licenses/name/Path(*file.parts[1:])
+                destination.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copy2(source,destination)
+shutil.copy2(root/"THIRD_PARTY.md",licenses/"README.md")
+for source in (root/"portable/licenses").glob("*"):
+    shutil.copy2(source,licenses/source.name)
+release=root/"artifacts/release"
+release.mkdir(parents=True,exist_ok=True)
+if system=="windows":
+    exe=stage/"RemoteDesk/RemoteDesk.exe"
+    subprocess.run([str(exe),"--smoke-test"],check=True,timeout=40)
+    shutil.make_archive(str(release/f"RemoteDesk-{system}-{arch}-portable"),"zip",stage,"RemoteDesk")
+elif system=="macos":
+    app=stage/"RemoteDesk.app"
+    # Resources were added after PyInstaller's ad-hoc signature; sign the final bundle again.
+    subprocess.run(["codesign","--force","--deep","--sign","-",str(app)],check=True)
+    subprocess.run([str(app/"Contents/MacOS/RemoteDesk"),"--smoke-test"],check=True,timeout=40)
+    # Disk image with the standard Applications shortcut for drag-to-install.
+    (stage/"Applications").symlink_to("/Applications",target_is_directory=True)
+    shutil.copy2(root/"docs/cross-platform.md",stage/"LEIA-ME.md")
+    dmg=release/f"RemoteDesk-{system}-{arch}.dmg"
+    image_stage=out/"image"
+    image_stage.mkdir(exist_ok=True)
+    shutil.copytree(app,image_stage/"RemoteDesk.app",symlinks=True,dirs_exist_ok=True)
+    (image_stage/"Applications").symlink_to("/Applications",target_is_directory=True)
+    shutil.copy2(root/"docs/cross-platform.md",image_stage/"LEIA-ME.md")
+    subprocess.run(["hdiutil","create","-volname","RemoteDesk","-srcfolder",str(image_stage),"-ov","-format","UDZO",str(dmg)],check=True)
+else:
+    bundle=stage/"RemoteDesk"
+    shutil.copy2(root/"portable/install-linux.sh",bundle/"install-linux.sh")
+    (bundle/"install-linux.sh").chmod(0o755)
+    shutil.copy2(icon,bundle/"RemoteDesk.png")
+    shutil.copy2(root/"docs/cross-platform.md",bundle/"LEIA-ME.md")
+    (bundle/".remotedesk-owned").write_text("RemoteDesk portable 1\n")
+    subprocess.run([str(bundle/"RemoteDesk"),"--smoke-test"],check=True,timeout=40)
+    with tarfile.open(release/f"RemoteDesk-{system}-{arch}.tar.gz","w:gz") as archive:
+        archive.add(bundle,arcname="RemoteDesk")
+print("Portable package:",system,arch)

@@ -1,0 +1,18 @@
+RemoteDesk client installer configuration validation — 2026-10-15
+
+Commands:
+E:\AnyCraft\.tools\dotnet\dotnet.exe run --project installer/tests/RemoteDesk.InstallerTests.csproj -c Release
+Result: 60 installer checks passed, exit0.
+27 existing extraction/path safety/update checks retained.
+33 configuration checks cover malformed endpoints, required host, non-loopback plaintext denial, ws localhost/IPv4/IPv6 loopback allowance, invalid ports/route/query/fragment/credentials, fingerprint validation and normalization, independent server/relay pins, JSON merge preserving alias/identity/recent/unknown nested values, no settings write on failed binary install, settings commit only after successful binary install, untouched DPAPI identity, temporary-file cleanup, byte-for-byte unedited updates, and malformed existing settings blocking binary updates.
+
+dotnet build installer/RemoteDesk.Setup.csproj -c Release
+Result: exit0, zero warnings/errors.
+
+Framework-dependent setup --render installer/installation-preview.png
+Framework-dependent setup --render-connection installer/connection-preview.png
+Result: exit0 both; images visually inspected. Dark flat red two-step layout, aligned controls and no text clipping. Render bypasses personal settings and does not install.
+
+Limits: no real user-profile installation, no shortcuts created, no Windows trust/firewall changes, no auto-launch, no server reachability check, no network session test for this UI-only installation-configuration change. New setup package publication intentionally delegated to parent after client UI is finalized. Existing --verify-payload support retained.
+
+Final adjustment: fresh server address starts empty with example below; existing address still preloaded on update. Latest rebuild zero warnings/errors; connection render exit0; --verify-payload exit0. No publication performed.

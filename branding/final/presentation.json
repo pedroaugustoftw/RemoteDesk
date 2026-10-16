@@ -1,0 +1,33 @@
+{
+    "brand":  "RemoteDesk",
+    "tagline":  "Acesso entre computadores",
+    "brief":  "Software Windows de acesso remoto. Direcao A aprovada: letra R em faixa com retorno aberto.",
+    "adjectives":  [
+                       "claro",
+                       "preciso",
+                       "confiavel"
+                   ],
+    "criteria":  "Leitura a16px; preto/branco e fundos claros/escuros.",
+    "industry":  "software",
+    "brand_color":  "#1D6FF2",
+    "greyscale":  false,
+    "concepts":  [
+                     {
+                         "name":  "Faixa R",
+                         "symbol":  "remotedesk-symbol.svg",
+                         "lockup":  "remotedesk-horizontal.svg",
+                         "lockup_on_dark":  "remotedesk-horizontal-dark.svg",
+                         "idea":  "Um R de retorno aberto, continuo e reconhecivel.",
+                         "rationale":  [
+                                           "Marca aprovada, simplificada em vetor.",
+                                           "Uma cor principal e desenho proprio.",
+                                           "Leitura independente de efeitos."
+                                       ]
+                     }
+                 ],
+    "recommendation":  "Faixa R: direcao escolhida.",
+    "next_steps":  [
+                       "Aplicar no app e instaladores",
+                       "Manter proporcoes e contraste"
+                   ]
+}

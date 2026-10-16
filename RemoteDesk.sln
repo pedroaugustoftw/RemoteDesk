@@ -1,0 +1,127 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk", "client\RemoteDesk.csproj", "{558C88C5-042B-4BC4-AB92-9C5B9255B6BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.Shared", "shared\RemoteDesk.Shared.csproj", "{C813F162-DB2A-4A7C-9255-113358E1EF63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.Server", "server\RemoteDesk.Server.csproj", "{9FE77BCB-BA57-4E64-AEBC-21D06D18B5AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.Relay", "relay\RemoteDesk.Relay.csproj", "{6F677BBA-735B-4416-A26E-904C3B0548F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.Setup", "installer\RemoteDesk.Setup.csproj", "{418B9C01-77CB-47E7-9A51-A37748694BAF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{895319AD-AC43-4CBF-88AC-76B69E528BA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.ClientTests", "tests\client\RemoteDesk.ClientTests.csproj", "{CEB0A3FE-7FA9-4562-8E6A-E12DDF1BFE5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.ServerTests", "tests\server\RemoteDesk.ServerTests.csproj", "{688BC2E7-42B4-4546-ADA3-135D89004CE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.RelayTests", "tests\relay\RemoteDesk.RelayTests.csproj", "{0D868E49-83EA-4BD3-BCBE-B6844CF39512}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{43823886-6FEE-4F27-A317-CA7584125938}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.LanSetup", "scripts\LanSetup\RemoteDesk.LanSetup.csproj", "{2945BBDB-CA76-4A5C-AF6B-ADDB00129F48}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "installer", "installer", "{E91E3238-5F46-4B67-A73E-4C5F1FE4AE64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.InstallerTests", "installer\tests\RemoteDesk.InstallerTests.csproj", "{693EE8FE-44F7-4751-8B78-C2CE243F9122}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.Infrastructure", "service\RemoteDesk.Infrastructure.csproj", "{FF0BA661-2BBC-4A74-9FF3-92238CA4609D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.Service", "service\RemoteDesk.Service.csproj", "{5569DCA6-089D-4B35-B89D-62F931D44CC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.ServerSetup", "server-installer\RemoteDesk.ServerSetup.csproj", "{E3FFD2BC-7AB0-486D-9653-C1324F44BED9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.ServiceTests", "tests\service\RemoteDesk.ServiceTests.csproj", "{9C720228-D764-4700-9F3D-F918CD750BB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.Uninstall", "uninstaller\RemoteDesk.Uninstall.csproj", "{D3299851-D6AA-4308-BBC1-190BC0D1B869}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDesk.InstallationTests", "tests\installation\RemoteDesk.InstallationTests.csproj", "{C541B8AF-2FFC-4377-B554-AE6BE1E79E10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{558C88C5-042B-4BC4-AB92-9C5B9255B6BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{558C88C5-042B-4BC4-AB92-9C5B9255B6BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{558C88C5-042B-4BC4-AB92-9C5B9255B6BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{558C88C5-042B-4BC4-AB92-9C5B9255B6BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C813F162-DB2A-4A7C-9255-113358E1EF63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C813F162-DB2A-4A7C-9255-113358E1EF63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C813F162-DB2A-4A7C-9255-113358E1EF63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C813F162-DB2A-4A7C-9255-113358E1EF63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FE77BCB-BA57-4E64-AEBC-21D06D18B5AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FE77BCB-BA57-4E64-AEBC-21D06D18B5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FE77BCB-BA57-4E64-AEBC-21D06D18B5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FE77BCB-BA57-4E64-AEBC-21D06D18B5AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F677BBA-735B-4416-A26E-904C3B0548F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F677BBA-735B-4416-A26E-904C3B0548F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F677BBA-735B-4416-A26E-904C3B0548F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F677BBA-735B-4416-A26E-904C3B0548F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{418B9C01-77CB-47E7-9A51-A37748694BAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{418B9C01-77CB-47E7-9A51-A37748694BAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{418B9C01-77CB-47E7-9A51-A37748694BAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{418B9C01-77CB-47E7-9A51-A37748694BAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEB0A3FE-7FA9-4562-8E6A-E12DDF1BFE5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEB0A3FE-7FA9-4562-8E6A-E12DDF1BFE5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB0A3FE-7FA9-4562-8E6A-E12DDF1BFE5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEB0A3FE-7FA9-4562-8E6A-E12DDF1BFE5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{688BC2E7-42B4-4546-ADA3-135D89004CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{688BC2E7-42B4-4546-ADA3-135D89004CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{688BC2E7-42B4-4546-ADA3-135D89004CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{688BC2E7-42B4-4546-ADA3-135D89004CE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D868E49-83EA-4BD3-BCBE-B6844CF39512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D868E49-83EA-4BD3-BCBE-B6844CF39512}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D868E49-83EA-4BD3-BCBE-B6844CF39512}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D868E49-83EA-4BD3-BCBE-B6844CF39512}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2945BBDB-CA76-4A5C-AF6B-ADDB00129F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2945BBDB-CA76-4A5C-AF6B-ADDB00129F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2945BBDB-CA76-4A5C-AF6B-ADDB00129F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2945BBDB-CA76-4A5C-AF6B-ADDB00129F48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{693EE8FE-44F7-4751-8B78-C2CE243F9122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{693EE8FE-44F7-4751-8B78-C2CE243F9122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{693EE8FE-44F7-4751-8B78-C2CE243F9122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{693EE8FE-44F7-4751-8B78-C2CE243F9122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF0BA661-2BBC-4A74-9FF3-92238CA4609D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF0BA661-2BBC-4A74-9FF3-92238CA4609D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF0BA661-2BBC-4A74-9FF3-92238CA4609D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF0BA661-2BBC-4A74-9FF3-92238CA4609D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5569DCA6-089D-4B35-B89D-62F931D44CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5569DCA6-089D-4B35-B89D-62F931D44CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5569DCA6-089D-4B35-B89D-62F931D44CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5569DCA6-089D-4B35-B89D-62F931D44CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3FFD2BC-7AB0-486D-9653-C1324F44BED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3FFD2BC-7AB0-486D-9653-C1324F44BED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3FFD2BC-7AB0-486D-9653-C1324F44BED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3FFD2BC-7AB0-486D-9653-C1324F44BED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C720228-D764-4700-9F3D-F918CD750BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C720228-D764-4700-9F3D-F918CD750BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C720228-D764-4700-9F3D-F918CD750BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C720228-D764-4700-9F3D-F918CD750BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3299851-D6AA-4308-BBC1-190BC0D1B869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3299851-D6AA-4308-BBC1-190BC0D1B869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3299851-D6AA-4308-BBC1-190BC0D1B869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3299851-D6AA-4308-BBC1-190BC0D1B869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C541B8AF-2FFC-4377-B554-AE6BE1E79E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C541B8AF-2FFC-4377-B554-AE6BE1E79E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C541B8AF-2FFC-4377-B554-AE6BE1E79E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C541B8AF-2FFC-4377-B554-AE6BE1E79E10}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CEB0A3FE-7FA9-4562-8E6A-E12DDF1BFE5E} = {895319AD-AC43-4CBF-88AC-76B69E528BA7}
+		{688BC2E7-42B4-4546-ADA3-135D89004CE7} = {895319AD-AC43-4CBF-88AC-76B69E528BA7}
+		{0D868E49-83EA-4BD3-BCBE-B6844CF39512} = {895319AD-AC43-4CBF-88AC-76B69E528BA7}
+		{2945BBDB-CA76-4A5C-AF6B-ADDB00129F48} = {43823886-6FEE-4F27-A317-CA7584125938}
+		{693EE8FE-44F7-4751-8B78-C2CE243F9122} = {E91E3238-5F46-4B67-A73E-4C5F1FE4AE64}
+		{9C720228-D764-4700-9F3D-F918CD750BB9} = {895319AD-AC43-4CBF-88AC-76B69E528BA7}
+		{C541B8AF-2FFC-4377-B554-AE6BE1E79E10} = {895319AD-AC43-4CBF-88AC-76B69E528BA7}
+	EndGlobalSection
+EndGlobal

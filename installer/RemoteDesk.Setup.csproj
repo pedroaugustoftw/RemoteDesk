@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>RemoteDesk-Setup</AssemblyName>
+    <ApplicationManifest>../client/app.manifest</ApplicationManifest><ApplicationIcon>..\client\UI\RemoteDesk.ico</ApplicationIcon>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+  <ItemGroup><Compile Include="../desktop/InstalledApplication.cs" Link="InstalledApplication.cs"/>
+    <Compile Include="../desktop/WindowSizing.cs" Link="WindowSizing.cs"/>
+
+    <Compile Include="../client/Services/StartupRegistration.cs" Link="StartupRegistration.cs" />
+    <Compile Remove="tests/**/*.cs" />
+    <Resource Include="..\client\UI\RemoteDesk.ico" Link="RemoteDesk.ico" />
+    <EmbeddedResource Include="payload.zip" LogicalName="RemoteDesk.Payload.zip" Condition="Exists('payload.zip')" />
+  </ItemGroup>
+  <Target Name="VerifyPayload" BeforeTargets="Publish">
+    <Error Condition="!Exists('payload.zip')" Text="Client payload missing. Run scripts/publish.ps1." />
+  </Target>
+</Project>
